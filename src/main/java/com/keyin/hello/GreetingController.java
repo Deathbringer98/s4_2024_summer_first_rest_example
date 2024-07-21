@@ -1,8 +1,7 @@
 package com.keyin.hello;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,5 +40,15 @@ public class GreetingController {
     @DeleteMapping("greeting/{index}")
     public void deleteGreeting(@PathVariable Integer index) {
         greetingService.deleteGreeting(index);
+    }
+
+    @PutMapping("/greeting/addLanguage/{language}")
+    public ResponseEntity<?> addLanguageToGreeting(@PathVariable String language, @RequestBody Greeting greeting) {
+        boolean isAdded = greetingService.addLanguageToGreeting(language, greeting);
+        if (isAdded) {
+            return ResponseEntity.ok("Greeting added successfully!");
+        } else {
+            return ResponseEntity.status(400).body("Greeting for this language already exists or greeting not found!");
+        }
     }
 }
